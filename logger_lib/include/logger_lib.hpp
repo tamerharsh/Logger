@@ -4,9 +4,14 @@
 #include <memory>
 #include <string>
 #include <iostream>
+#include <fstream>
+
+#include "fmt/format.h"
+#include "fmt/ostream.h"
 
 #define FLAG_ON(...)  logger::Logging::extract_all_credentials(__DATE__,__TIME__,__FILE__,__FUNCTION__,__LINE__,__VA_ARGS__)
 #define FLAG_OFF(...)	logger::Logging::extract_minimimal_credentials(__DATE__,__TIME__)	
+
 
 namespace logger
 {
@@ -17,11 +22,11 @@ namespace logger
 	//Logs the credentials.:date, time,file_name,function_name,line_number,logger_name,logger_level,message.
 	//Written in chronological order.	
 	struct  LogCredentials {
-		std::string date="null";
-		std::string time = "null";
-		std::string file_name = "null";
-		std::string function_name = "null";
-		int line = 0;
+		std::string date="";
+		std::string time="";
+		std::string file_name="";
+		std::string function_name="" ;
+		int line=0;
 		std::string logger_name = "root";
 	};
 
@@ -47,7 +52,10 @@ namespace logger
 		
 		//Severity level prefered by user.
 		const logger::LEVEL severity_level;
-
+		 
+		//Formats the data .
+		template<typename T=std::string>
+		std::string format_data(T msg_, logger::LEVEL,std::shared_ptr<logger::LogCredentials> any_credentails);
 	};	
 	//Ctor implementation.
 	logger::Logging::Logging(logger::LEVEL severity_level_) :severity_level(severity_level_)
@@ -82,6 +90,40 @@ namespace logger
 		
 		return false;
 
+	}
+	template<typename T>
+	std::string  Logging::format_data(T msg_, logger::LEVEL level, std::shared_ptr<logger::LogCredentials> any_credentails)
+	{
+
+		auto message_in_string_format=fmt::to_string(msg_ );
+
+		
+		std::string level_in_string_format;
+		
+		//Converting log levels into strings.
+		switch (level) 
+		{
+		case logger::LEVEL::OFF: level_in_string_format="OFF" ; break;
+		case logger::LEVEL::FATAL: level_in_string_format="FATAL"; break;
+		case logger::LEVEL::DEBUG: level_in_string_format="DEBUG"; break;
+		case logger::LEVEL::WARN:  level_in_string_format="WARN" ; break;
+		case logger::LEVEL::ERROR: level_in_string_format="ERROR"; break;
+		case logger::LEVEL::TRACE: level_in_string_format="TRACE"; break;
+	
+		}
+
+		//if  filename etc is empty display only logger level and msg else all credentials.
+		if (!any_credentails->file_name.empty())
+		{
+			return  fmt::format("[Time]:{} - {}, [Logger]:{}, [File]:{}, [Function Name]:{}, [Line]:{} ,[Level]:{} ,[Message]:{}", any_credentails->date, any_credentails->time, any_credentails->logger_name, any_credentails->file_name, any_credentails->function_name, any_credentails->line, level_in_string_format, message_in_string_format);
+
+		}
+		else
+		{
+			return fmt::format("[Time]:{} - {}, [Logger]:{}, [Level]:{}, [Message]:{}", any_credentails->date, any_credentails->time, any_credentails->logger_name,  level_in_string_format, message_in_string_format);
+
+		}
+	
 	}
 
 };

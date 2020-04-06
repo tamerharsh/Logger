@@ -27,6 +27,16 @@ int main(int argc,char**argv)
 	test_func_2();
 
 	obj.trace("ok");
+
+	try {
+		throw std::exception("exception");
+	}
+	catch (std::exception& ex)
+	{
+		std::cout << "\n try and catch block"<<std::endl;
+		obj.trace(ex.what(),FLAG_ON());
+	
+	}
 	return 0;
 }
 
