@@ -56,6 +56,10 @@ namespace logger
 		//Formats the data .
 		template<typename T=std::string>
 		std::string format_data(T msg_, logger::LEVEL,std::shared_ptr<logger::LogCredentials> any_credentails);
+
+		//Check the Serverity level if  given level is below the specified return true else false.
+		bool  check_severity_level(logger::LEVEL level);
+
 	};	
 	//Ctor implementation.
 	logger::Logging::Logging(logger::LEVEL severity_level_) :severity_level(severity_level_)
@@ -124,6 +128,12 @@ namespace logger
 
 		}
 	
+		bool logger::Logging::check_severity_level(logger::Logging level_)
+		{
+			
+			return level_ <= severity_level ? true : false;
+		
+		}
 	}
 
 };
