@@ -128,14 +128,13 @@ namespace logger
 
 		}
 	
-		bool logger::Logging::check_severity_level(logger::Logging level_)
-		{
-			
-			return level_ <= severity_level ? true : false;
-		
-		}
 	}
 
+	bool logger::Logging::check_severity_level(logger::LEVEL level_)
+	{
+		return level_ <= severity_level ? true : false;
+	}
+	
 };
 #endif LOGGER_LIB_HPP
 
