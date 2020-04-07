@@ -4,7 +4,7 @@
 namespace logger
 {
 	//Defining log level with severity levels.
-	enum class LEVEL :int { OFF = 0, FATAL = 1, ERROR, WARN, DEBUG, TRACE = 5 };
+	enum class LEVEL :int { OFF = 0, FATAL = 1, ERROR=2, WARN=3, DEBUG=4, TRACE = 5 };
 
 };
 
