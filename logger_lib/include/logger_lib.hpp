@@ -5,6 +5,7 @@
 #include <string>
 #include <iostream>
 #include <fstream>
+#include <fstream>
 
 #include "fmt/format.h"
 #include "fmt/ostream.h"
@@ -52,13 +53,16 @@ namespace logger
 		
 		//Severity level prefered by user.
 		const logger::LEVEL severity_level;
-		 
+		
 		//Formats the data .
 		template<typename T=std::string>
 		std::string format_data(T msg_, logger::LEVEL,std::shared_ptr<logger::LogCredentials> any_credentails);
 
 		//Check the Serverity level if  given level is below the specified return true else false.
 		bool  check_severity_level(logger::LEVEL level);
+
+		//Record data to a file.
+		bool record(std::string data);
 
 	};	
 	//Ctor implementation.
@@ -91,7 +95,7 @@ namespace logger
 	template<typename T>
 	bool logger::Logging::trace(T msg_, std::shared_ptr<logger::LogCredentials> trace_credentials_)
 	{
-		
+		record("hello");
 		return false;
 
 	}
@@ -136,6 +140,18 @@ namespace logger
 		}
 	}
 
+	bool logger::Logging::record(std::string data_)
+	{
+		std::fstream file;
+		file.open("log.txt", std::ios::out | std::ios::app);
+		if (file.bad())
+		{
+			throw std::exception("File Cannot be opened !!");
+		}
+		file << "\n " << data_;
+		file.close();
+		return true;
+	}
 };
 #endif LOGGER_LIB_HPP
 
