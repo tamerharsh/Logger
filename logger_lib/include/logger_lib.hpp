@@ -64,6 +64,8 @@ namespace logger
 		//Record data to a file.
 		bool record(std::string data);
 
+		
+
 	};	
 	//Ctor implementation.
 	logger::Logging::Logging(logger::LEVEL severity_level_) :severity_level(severity_level_)
@@ -90,13 +92,6 @@ namespace logger
 		credentials_ptr->line = line_;
 
 		return credentials_ptr;
-	}
-
-	template<typename T>
-	bool logger::Logging::trace(T msg_, std::shared_ptr<logger::LogCredentials> trace_credentials_)
-	{
-		return false;
-
 	}
 
 	template<typename T>
@@ -150,6 +145,24 @@ namespace logger
 		file << "\n " << data_;
 		file.close();
 		return true;
+	}
+
+	template<typename T>
+	bool logger::Logging::trace(T msg_, std::shared_ptr<logger::LogCredentials> trace_credentials_)
+	{
+		auto check_serverity_result = check_severity_level(logger::LEVEL::OFF);
+		
+		if (check_serverity_result)
+		{
+			auto log_data_to_file = format_data(msg_, logger::LEVEL::TRACE, trace_credentials_);
+			record(log_data_to_file);
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+		
 	}
 };
 #endif LOGGER_LIB_HPP
