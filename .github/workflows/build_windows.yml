@@ -29,7 +29,7 @@ jobs:
         cd build 
     - name: build the lib 
       run: |
-         cmake G "Visual Studio 15 2017 Win64" -L ..
+         cmake -G "Visual Studio 15 2017 Win64" -L ..
          cmake --build . --config release 
          
 
