@@ -26,10 +26,10 @@ jobs:
     - name: Create a build directory
       run: |
         mkdir build 
-        cd build 
     - name: build the lib 
       run: |
-         cmake -G "Visual Studio 15 2017 Win64" -L ..
+        cd build
+        cmake -G "Visual Studio 15 2017 Win64" -L ..
          cmake --build . --config release 
  
     # Runs a set of commands using the runners shell
